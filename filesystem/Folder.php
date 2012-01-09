@@ -419,15 +419,11 @@ class Folder extends File {
 		$titleField = ($this->ID && $this->ID != "root") ? new TextField("Title", _t('Folder.TITLE')) : new HiddenField("Title");
 
 		$fields = new FieldList(
-			new TabSet('Root',
-				new Tab('Main',
-					$titleField,
-					$gridField,
-					new HiddenField("ID"),
-					new HiddenField("Name"),
-					new HiddenField("DestFolderID")
-				)
-			)
+			$titleField,
+			$gridField,
+			new HiddenField("ID"),
+			new HiddenField("Name"),
+			new HiddenField("DestFolderID")
 		);
 		
 		if(!$this->canEdit()) {
