@@ -44,6 +44,8 @@ class DataList extends ViewableData implements SS_List, SS_Filterable, SS_Sortab
 	 */
 	protected $model;
 
+	private static $_cache_by_id = array();
+
 	/**
 	 * Create a new DataList.
 	 * No querying is done on construction, but the initial query schema is set up.
@@ -833,7 +835,12 @@ class DataList extends ViewableData implements SS_List, SS_Filterable, SS_Sortab
 	 */
 	public function byID($id) {
 		$baseClass = ClassInfo::baseDataClass($this->dataClass);
-		return $this->where("\"$baseClass\".\"ID\" = " . (int)$id)->First();
+		$cacheKey = "{$baseClass}:{$id}";
+		if (!array_key_exists($cacheKey, self::$_cache_by_id)) {
+			$obj = $this->where("\"$baseClass\".\"ID\" = " . (int)$id)->First();
+			self::$_cache_by_id[$cacheKey] = $obj;
+		}
+		return self::$_cache_by_id[$cacheKey];
 	}
 	
 	/**
